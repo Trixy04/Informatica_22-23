@@ -1,0 +1,70 @@
+Query 1 -->
+
+SELECT C.CategoryName FROM Categories AS C, Products AS P, OrderDetails AS OD, Orders AS O, Customers AS CU
+WHERE P.CategoryID = C.CategoryID AND
+P.ProductID = OD.ProductID AND
+OD.OrderID = O.OrderID AND
+O.CustomerID = CU.CustomerID AND
+CU.Country = "Brazil"
+GROUP BY C.CategoryName;
+
+Query 2 -->
+
+SELECT CU.City FROM Customers AS CU, Orders AS O, Shippers AS S
+WHERE O.CustomerID = CU.CustomerID AND
+S.ShipperID = O.ShipperID AND
+S.ShipperName = "Speedy Express"
+GROUP BY CU.City;
+
+Query 3 -->
+
+SELECT CU.City FROM Customers AS CU, Orders AS O, Shippers AS S
+WHERE O.CustomerID = CU.CustomerID AND
+S.ShipperID = O.ShipperID AND
+S.ShipperName = "Speedy Express" OR S.ShipperName = "United Package"
+GROUP BY CU.City;
+
+Query 4 -->
+
+SELECT CU.CustomerName FROM Customers AS CU, Orders AS O, OrderDetails AS OD, Categories AS C, Products AS P
+WHERE O.CustomerID = CU.CustomerID AND
+OD.OrderID = O.OrderID AND 
+P.ProductID = OD.ProductID AND
+C.CategoryID = P.CategoryID  AND 
+C.CategoryName = "Seafood" OR C.CategoryName = "Confections"
+GROUP BY CU.CustomerName;
+
+Query 5 -->
+
+SELECT CU.CustomerName FROM Customers AS CU, Orders AS O, OrderDetails AS OD, Categories AS C, Products AS P
+WHERE O.CustomerID = CU.CustomerID AND
+OD.OrderID = O.OrderID AND 
+P.ProductID = OD.ProductID AND
+C.CategoryID = P.CategoryID  AND 
+C.CategoryName = "Seafood" OR C.CategoryName = "Confections"
+GROUP BY CU.CustomerName;
+
+Query 6 -->
+
+SELECT * FROM Customers
+WHERE CustomerName LIKE "%Isabel%";
+
+Query 7 -->
+
+SELECT * FROM Products
+WHERE ProductName LIKE "c%e";
+
+Query 8 -->
+
+SELECT * FROM Products
+WHERE ProductName LIKE "c%" AND ProductName LIKE "_____";
+
+Query 9 -->
+
+SELECT * FROM Products
+WHERE ProductName LIKE "ch%_____";
+
+Query 10 -->
+
+SELECT * FROM Products
+WHERE ProductName LIKE "%mix";

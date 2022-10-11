@@ -1,0 +1,66 @@
+1. 
+SELECT * FROM Customers
+WHERE Country = 'France'
+
+2.
+SELECT * FROM Customers
+WHERE Country = 'France' OR Country = 'UK'
+
+3.
+SELECT * FROM Orders, Shippers, Customers
+WHERE 
+Orders.ShipperID = Shippers.ShipperID AND
+Orders.CustomerID = Customers.CustomerID AND
+Shippers.ShipperName = 'United Package' AND
+Customers.CustomerName = 'Hanari Carnes'
+
+4.
+SELECT * FROM Products
+WHERE Price > 30
+
+5.
+SELECT P.ProductID, P.ProductName, S.SupplierName FROM Products AS P, Suppliers AS S
+WHERE S.SupplierID = P.SupplierID AND
+S.Country = 'Italy'
+
+6.
+SELECT * FROM Products AS P, Categories AS C
+WHERE C.CategoryID = P.CategoryID AND 
+C.CategoryName = 'Seafood'
+ORDER BY P.ProductName ASC
+
+7.
+SELECT * FROM OrderDetails AS OD, Products AS P, Orders AS O
+WHERE 
+P.ProductID = OD.ProductID AND
+O.OrderID = OD.OrderID AND 
+O.Orderdate = '1996-07-04'
+
+8.
+SELECT DISTINCT * FROM Shippers AS S, Orders AS O, Customers AS C
+WHERE 
+O.ShipperID = S.ShipperID AND
+C.CustomerID = O.CustomerID AND
+C.Country = 'UK'
+
+9.
+SELECT DISTINCT * FROM Employees AS E, Orders as O
+WHERE 
+O.EmployeeID = E.EmployeeID AND
+O.Orderdate BETWEEN '1996-08-26' AND '1997-08-26'
+
+10.
+SELECT DISTINCT CategoryName FROM Categories AS C, Products AS P
+WHERE P.CategoryID = C.CategoryID AND
+P.Price BETWEEN 15 AND 20
+
+11.
+SELECT DISTINCT * FROM Employees AS E, Orders AS O
+WHERE 
+O.EmployeeID = E.EmployeeID AND
+
+12.
+SELECT S.SupplierName, C.CustomerName FROM Suppliers AS S, Customers AS C
+WHERE
+C.Country = S.Country 
+GROUP BY S.SupplierName
