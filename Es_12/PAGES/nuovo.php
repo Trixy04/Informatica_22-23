@@ -1,4 +1,5 @@
 <?php
+session_start();
 include("../PHP/config.php");
 
 ?>
@@ -16,15 +17,38 @@ include("../PHP/config.php");
 </head>
 
 <body>
-
-    <a href="../index.php"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-house-door-fill" viewBox="0 0 16 16">
-            <path d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5Z" />
-        </svg>
-    </a>
+<nav class="navbar navbar-expand-lg mb-5 w-100">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="home.php">
+                <img src="../IMAGES/Logo_Blockbuster.png" alt="Bootstrap" width="30" height="24">
+            </a>
+            <a class="navbar-brand" href="home.php">Blockbuster</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <div class="dropdown-center">
+                        <a class="dropdown-toggle nav-link" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <?php echo $_SESSION["nominativo"] ?>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#">Gestisci profilo</a></li>
+                            <li><a class="dropdown-item" href="#">Action two</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item text-danger" href="home.php?name=true">Logout</a></li>
+                        </ul>
+                    </div>
+                </ul>
+            </div>
+        </div>
+    </nav>
 
     <center>
 
-    <h6 class="text-success"><?php echo $esito; ?></h6>
+        <h6 class="text-success"><?php echo $esito; ?></h6>
 
         <h2 class="mt-5">Inserimento nuovo video</h2>
         <form class="div-form w-50" method="POST" action="../PHP/inserimento.php">
@@ -42,7 +66,17 @@ include("../PHP/config.php");
 
             <div class="input-group mb-3">
                 <span class="input-group-text" id="basic-addon1">Anno</span>
-                <input name="anno" type="text" class="form-control" placeholder="Anno registrazione" aria-label="Username" aria-describedby="basic-addon1" required>
+                <input name="anno" type="number" class="form-control" placeholder="Anno registrazione" aria-label="Username" aria-describedby="basic-addon1" required>
+            </div>
+
+            <div class="input-group mb-3">
+                <span class="input-group-text">Trama</span>
+                <textarea class="form-control" name="trama" aria-label="With textarea" required></textarea>
+            </div>
+
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="basic-addon1">Url immagine</span>
+                <input name="url" type="text" class="form-control" placeholder="Url immagine" aria-label="Username" aria-describedby="basic-addon1" required>
             </div>
 
             <div class="input-group mb-3">
@@ -50,12 +84,13 @@ include("../PHP/config.php");
                 <select class="form-select text-black" aria-label="Default select example" name="tipologia" required>
                     <option selected>- - - - - - -</option>
                     <?php
-                    $sql = "SELECT tipologia FROM `Tipologia`";
+                    $sql = "SELECT * FROM `Tipologia`";
                     $result = $conn->query($sql);
                     if ($result->num_rows > 0) {
                         while ($row = $result->fetch_assoc()) {
                             $tip = $row["tipologia"];
-                            echo '<option name="tipologia" value="' . $tip . '">' . $tip . '</option>';
+                            $id = $row["id"];
+                            echo '<option name="tipologia" value="' . $id . '">' . $tip . '</option>';
                         }
                     }
                     ?>
@@ -67,17 +102,21 @@ include("../PHP/config.php");
                 <select class="form-select" aria-label="Default select example" name="genere" required>
                     <option selected>- - - - - - -</option>
                     <?php
-                    $sql = "SELECT descrizione FROM `Genere`";
+                    $sql = "SELECT * FROM `Genere`";
                     $result = $conn->query($sql);
                     if ($result->num_rows > 0) {
                         while ($row = $result->fetch_assoc()) {
                             $gen = $row["descrizione"];
-                            echo '<option name="genere" value="' . $gen . '">' . $gen . '</option>';
+                            $id_g = $row["id"];
+                            echo '<option name="genere" value="' . $id_g . '">' . $gen . '</option>';
                         }
                     }
-                    
+
                     $conn = null;
                     ?>
+
+
+
                 </select>
             </div>
 

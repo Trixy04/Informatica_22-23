@@ -2,48 +2,34 @@
 session_start();
 include("../PHP/config.php");
 
-$gen = $_POST["genere"];
+if (!isset($_SESSION["nominativo"])) {
+    header("Location: ../index.php");
+}
 
-if (!empty($_POST["genere"])) {
-    $sql = "SELECT * FROM `Video` WHERE genere = '$gen'";
+if (isset($_GET["name"])) {
+    deleteSession();
+}
+
+$film = $_POST["name"];
+$sql = "SELECT * FROM `Video` WHERE titolo = '$film'";
     $result = $conn->query($sql);
-    $tabella = "";
-
     while ($row = $result->fetch_assoc()) {
-        $tabella .= "<tr>
-    <td>" . $row["id"] . "</td>
-    <td>" . $row["titolo"] . "</td>
-    <td>" . $row["regista"] . "</td>
-    <td> " . $row["anno"] . "</td>
-    <td> " . $row["tipo"] . "</td>
-    <td> " . $row["genere"] . "</td>
-    </tr>";
+        echo $url = '../IMAGES/'.$row["url_img"].'.jpeg';
+        $regista = $row["regista"];
+        $trama = $row["trama"];
     }
 
-}else{
 
-    $sql = "SELECT * FROM `Video`";
-    $result = $conn->query($sql);
-    $tabella = "";
-
-    while ($row = $result->fetch_assoc()) {
-        $tabella .= "<tr>
-    <td>" . $row["id"] . "</td>
-    <td>" . $row["titolo"] . "</td>
-    <td>" . $row["regista"] . "</td>
-    <td> " . $row["anno"] . "</td>
-    <td> " . $row["tipo"] . "</td>
-    <td> " . $row["genere"] . "</td>
-    </tr>";
-    }
-    
+function deleteSession()
+{
+    session_start();
+    session_destroy();
+    header("Location: ../index.php");
 }
 
 
 
-
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -53,12 +39,12 @@ if (!empty($_POST["genere"])) {
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="Description" content="Enter your description here" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
-    <link rel="stylesheet" href="../CSS/style.css" type="text/css">
-    <title>Title</title>
+    <link rel="stylesheet" href="" type="text/css">
+    <title><?php echo $titolo?></title>
 </head>
 
 <body>
-<nav class="navbar navbar-expand-lg mb-5 w-100">
+    <nav class="navbar navbar-expand-lg mb-5 w-100">
         <div class="container-fluid">
             <a class="navbar-brand" href="home.php">
                 <img src="../IMAGES/Logo_Blockbuster.png" alt="Bootstrap" width="30" height="24">
@@ -88,49 +74,30 @@ if (!empty($_POST["genere"])) {
     </nav>
 
     <center>
-        <h1 class="mt-5">Lista video</h1>
-        <p>Clicca sul genere per visualizzare la tabella con i film</p>
-        <form action="" method="POST">
-        <select class="form-select text-black w-25" aria-label="Default select example" name="genere">
-            <option value="">Tutti</option>
-            <?php
-            $sql = "SELECT descrizione FROM `Genere`";
-            $result = $conn->query($sql);
-            if ($result->num_rows > 0) {
-                while ($row = $result->fetch_assoc()) {
-                    $tip = $row["descrizione"];
-                    echo '<option name="genere" value="' . $tip . '">' . $tip . '</option>';
-                }
-            }
-            $conn = null;
-            ?>
-            
-        </select>
-        <button type="submit" class="btn btn-primary mt-3" name="gen">Filtra</button>
-
-        </form>
-
-        <table class="table table-striped mt-5 w-75">
-            <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Titolo</th>
-                    <th scope="col">Regista</th>
-                    <th scope="col">Anno</th>
-                    <th scope="col">Tipo</th>
-                    <th scope="col">Genere</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php echo $tabella; ?>
-            </tbody>
-        </table>
-
-
-
+        <h3 class="mb-5">Specifiche del film <?php ?></h3>
+        <hr class="w-50">
     </center>
 
+    
+    <div class="container mt-5 ">
+  <div class="row">
+    <div class="col">
+      <h5>TITOLO FILM: </h5>
+      <h5 class="mt-3">REGISTA: </h5>
+      <h5 class="mt-3">ANNO: </h5>
+      <h5 class="mt-3">DURATA: </h5>
+      <h5 class="mt-3">TRAMA: </h5>
+      
+    </div>
+    
+    <div class="col">
+      <img src="../IMAGES/img_01.jpeg">
+    </div>
+  </div>
+</div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+
 </body>
 
 </html>

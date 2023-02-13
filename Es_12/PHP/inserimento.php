@@ -7,9 +7,11 @@ $regista = $_POST["regista"];
 $anno = $_POST["anno"];
 $genere = $_POST["genere"];
 $tipologia = $_POST["tipologia"];
+$trama = $_POST["trama"];
+$url = $_POST["url"];
 
-$sql = "INSERT INTO Video (anno, genere, regista, tipo, titolo)
-VALUES ('$anno', '$genere', '$regista', '$tipologia', '$titolo')";
+$sql = "INSERT INTO Video (anno, genere, regista, tipo, titolo, trama, url_img)
+VALUES ('$anno', '$genere', '$regista', '$tipologia', '$titolo', '$trama', '$url')";
 
 if (mysqli_query($conn, $sql)) {
     $esito = "Inserimento avvenuto con successo";

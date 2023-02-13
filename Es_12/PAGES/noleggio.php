@@ -2,48 +2,22 @@
 session_start();
 include("../PHP/config.php");
 
-$gen = $_POST["genere"];
-
-if (!empty($_POST["genere"])) {
-    $sql = "SELECT * FROM `Video` WHERE genere = '$gen'";
-    $result = $conn->query($sql);
-    $tabella = "";
-
-    while ($row = $result->fetch_assoc()) {
-        $tabella .= "<tr>
-    <td>" . $row["id"] . "</td>
-    <td>" . $row["titolo"] . "</td>
-    <td>" . $row["regista"] . "</td>
-    <td> " . $row["anno"] . "</td>
-    <td> " . $row["tipo"] . "</td>
-    <td> " . $row["genere"] . "</td>
-    </tr>";
-    }
-
-}else{
-
-    $sql = "SELECT * FROM `Video`";
-    $result = $conn->query($sql);
-    $tabella = "";
-
-    while ($row = $result->fetch_assoc()) {
-        $tabella .= "<tr>
-    <td>" . $row["id"] . "</td>
-    <td>" . $row["titolo"] . "</td>
-    <td>" . $row["regista"] . "</td>
-    <td> " . $row["anno"] . "</td>
-    <td> " . $row["tipo"] . "</td>
-    <td> " . $row["genere"] . "</td>
-    </tr>";
-    }
-    
+if (!isset($_SESSION["nominativo"])) {
+    header("Location: ../index.php");
 }
 
+if (isset($_GET["name"])) {
+    deleteSession();
+}
 
-
+function deleteSession()
+{
+    session_start();
+    session_destroy();
+    header("Location: ../index.php");
+}
 
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -53,12 +27,12 @@ if (!empty($_POST["genere"])) {
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="Description" content="Enter your description here" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
-    <link rel="stylesheet" href="../CSS/style.css" type="text/css">
-    <title>Title</title>
+    <link rel="stylesheet" href="" type="text/css">
+    <title>NOLEGGIO</title>
 </head>
 
 <body>
-<nav class="navbar navbar-expand-lg mb-5 w-100">
+    <nav class="navbar navbar-expand-lg mb-5 w-100">
         <div class="container-fluid">
             <a class="navbar-brand" href="home.php">
                 <img src="../IMAGES/Logo_Blockbuster.png" alt="Bootstrap" width="30" height="24">
@@ -88,49 +62,51 @@ if (!empty($_POST["genere"])) {
     </nav>
 
     <center>
-        <h1 class="mt-5">Lista video</h1>
-        <p>Clicca sul genere per visualizzare la tabella con i film</p>
-        <form action="" method="POST">
-        <select class="form-select text-black w-25" aria-label="Default select example" name="genere">
-            <option value="">Tutti</option>
-            <?php
-            $sql = "SELECT descrizione FROM `Genere`";
-            $result = $conn->query($sql);
-            if ($result->num_rows > 0) {
-                while ($row = $result->fetch_assoc()) {
-                    $tip = $row["descrizione"];
-                    echo '<option name="genere" value="' . $tip . '">' . $tip . '</option>';
-                }
-            }
-            $conn = null;
-            ?>
-            
-        </select>
-        <button type="submit" class="btn btn-primary mt-3" name="gen">Filtra</button>
-
-        </form>
-
-        <table class="table table-striped mt-5 w-75">
-            <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Titolo</th>
-                    <th scope="col">Regista</th>
-                    <th scope="col">Anno</th>
-                    <th scope="col">Tipo</th>
-                    <th scope="col">Genere</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php echo $tabella; ?>
-            </tbody>
-        </table>
-
-
-
+        <h3 class="mb-5">Benvenuto nella pagina del noleggio video</h3>
+        <hr class="w-50">
     </center>
 
+    
+<div class="container text-center">
+<div class="row">
+
+
+<?php
+    $sql = "SELECT * FROM `Video`";
+    $result = $conn->query($sql);
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+
+            $titolo = $row["titolo"];
+            $trama = substr($row["trama"], 0, 150) . '...';
+            $url = '../IMAGES/'.$row["url_img"].'.jpeg';
+
+            echo "<a href='spec.php?name=$titolo'><div class='col'>
+            <div class='card' style='width: 18rem;'>
+            <img src=$url class='card-img-top' alt='...'>
+            <div class='card-body'>
+                <h5 class='card-title'>$titolo</h5>
+                <p class='card-text'>$trama</p>
+                <a href='#' class='btn btn-primary'>Noleggia
+                    <svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-cart-plus-fill' viewBox='0 0 16 16'>
+                        <path d='M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zM9 5.5V7h1.5a.5.5 0 0 1 0 1H9v1.5a.5.5 0 0 1-1 0V8H6.5a.5.5 0 0 1 0-1H8V5.5a.5.5 0 0 1 1 0z' />
+                    </svg>
+                </a>
+            </div>
+            </div>
+        </div>
+        </a>";
+        }
+    }
+
+    $conn = null;
+    ?>
+
+</div>
+</div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+
 </body>
 
 </html>
