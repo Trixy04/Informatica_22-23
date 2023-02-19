@@ -2,32 +2,35 @@
 session_start();
 include("PHP/config.php");
 
-if((isset($_SESSION["nominativo"]))){
+if ((isset($_SESSION["nominativo"]))) {
     header("Location: Pages/home.php");
-}else{
+} else {
 
-if (isset($_POST["email"])) {
-    $email = $_POST["email"];
-    $pw = $_POST["password"];
+    if (isset($_POST["email"])) {
+        $email = $_POST["email"];
+        $pw = $_POST["password"];
 
-    $email = stripcslashes($email);
-    $pw = stripcslashes($pw);
+        $email = stripcslashes($email);
 
-    $sql = "SELECT email, nome, cognome FROM userData WHERE email = '$email' and pass = '$pw'";
-    $result = mysqli_query($conn, $sql);
-    $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-    $count = mysqli_num_rows($result);
 
-    $_SESSION["nominativo"] = $row["cognome"] . " " . $row["nome"];
+        $pw = stripcslashes($pw);
 
-    if ($count == 1) {
-        $email = "";
-        $pw = "";
-        header("location: Pages/home.php");
-    } else {
-        $string = "Email o password non corretti";
+        $sql = "SELECT id, email, nome, cognome FROM userData WHERE email = '$email' and pass = '$pw'";
+        $result = mysqli_query($conn, $sql);
+        $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+        $count = mysqli_num_rows($result);
+
+        $_SESSION["nominativo"] = $row["cognome"] . " " . $row["nome"];
+        $_SESSION["id_nominativo"] = $row["id"];
+
+        if ($count == 1) {
+            $email = "";
+            $pw = "";
+            header("location: Pages/home.php");
+        } else {
+            $string = "Email o password non corretti";
+        }
     }
-}
 }
 
 
@@ -70,17 +73,14 @@ $conn = null;
 
         <p>Oppure accedi con Google</p>
 
-        <div id="g_id_onload"
-         data-client_id="959771836111-fstgsvtee13gq9cekh4m1o4v0l0anats.apps.googleusercontent.com"
-         data-ux_mode="redirect"
-         data-login_uri="http://localhost/Es_12/Pages/home.php">
-    </div>
+        <div id="g_id_onload" data-client_id="959771836111-fstgsvtee13gq9cekh4m1o4v0l0anats.apps.googleusercontent.com" data-ux_mode="redirect" data-login_uri="http://localhost/Es_12/Pages/home.php">
+        </div>
 
-    <div class="g_id_signin" data-shape="pill" data-type="standard"></div>
+        <div class="g_id_signin" data-shape="pill" data-type="standard"></div>
     </div>
 
     </div>
-
+    
     <script src="JS/main.js"></script>
     <script src="https://accounts.google.com/gsi/client" onload="console.log('TODO: add onload function')"></script>
     <script src="https://accounts.google.com/gsi/client" async defer></script>

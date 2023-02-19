@@ -120,3 +120,18 @@
 .w-425{
   width: 46%;
 }
+
+.w-65{
+  width: 65%;
+}
+
+a{
+  text-decoration: none!important;
+  color: black;
+}
+
+.price{
+  background: rgb(206, 206, 206);
+  border-radius: 5%;
+  padding: 4%;
+}
